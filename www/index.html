@@ -9,26 +9,54 @@
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' gap:; style-src 'self' 'unsafe-inline'; media-src *" />
 
     <title>Supreme Fest 2018</title>
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
     <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
-    <link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css">
+    <!--<link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css">-->
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
 </head>
 <body>
 
-<div class="app" data-role="page" id="main">
+<div data-role="panel" id="status">
+    <div class="status-bar" id="status-bar">
+        <div class="panel-heading">
+            <a href="#lateral-menu" class="panel-toggle"><i class="fas fa-bars"></i></a>
+        </div>
+    </div>
+</div>
+
+<div data-role="panel" id="lateral-menu" data-position="left" data-display="overlay" class="ui-panel ui-panel-position-left ui-panel-display-overlay ui-body-a ui-panel-animate ui-panel-closed">
+    <div class="menu-optns">
+        <a href="" class="ui-btn">Página 1</a>
+        <a href="" class="ui-btn">Página 2</a>
+        <a href="" class="ui-btn">Página 3</a>
+    </div>
+</div>
+
+<div class="app" data-role="page" id="content">
     <div class="container">
-        <a href="pages/page1.html" class="ui-btn" data-prefetch>This link will prefetch the page</a>
+        <div data-role="header">
+        </div>
+
+        <div role="main" class="ui-content" id="main">
+            <a href="pages/page1.html" class="ui-btn" data-prefetch>This link will prefetch the page</a>
+        </div>
+        <div data-role="footer">
+
+        </div>
     </div>
 </div>
 
 <div class="footer">
     <!---<script type="text/javascript" src="cordova.js"></script>-->
-    <!--<script type="text/javascript" src="js/index.js"></script>-->}
+    <!--<script type="text/javascript" src="js/index.js"></script>-->
     <script src="js/jquery-2.2.4.min.js"></script>
     <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
     <script type="text/javascript">
         //app.initialize();
+        $(function() {
+            $( "body>[data-role='panel']" ).panel();
+        });
     </script>
     <script type="text/javascript" src="js/popper.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
