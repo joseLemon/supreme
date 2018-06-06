@@ -1,3 +1,27 @@
+/* GENERAL */
+body::before {
+    content: '';
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url(../img/logos/logo.png) #c3c3c3 no-repeat top center;
+    background-size: 50%;
+    will-change: transform;
+    z-index: 0;
+}
+
+.spacing {
+    margin: 30px 0;
+}
+
+.internal-spacing {
+    padding: 30px 10px;
+}
+
+.no-margin {
+    margin: 0;
+}
+
 /* MENU */
 .ui-panel {
 }
@@ -24,7 +48,7 @@
 
 .panel-heading {
     position: relative;
-    height: 2em;
+    height: 32px;
 }
 
 .ui-panel-closed .panel-toggle {
@@ -32,10 +56,9 @@
 }
 
 .panel-toggle {
-    position: absolute;
+    position: relative;
     padding-left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 4px;
     color: #fff!important;
     text-shadow: none!important;
 }
@@ -59,28 +82,14 @@
 
 #lateral-menu {
     position: fixed;
-    margin-top: 2em;
-    min-height: calc(100% - 2em);
+    margin-top: 32px;
+    min-height: calc(100% - 32px);
 }
 
 /* PAGES */
 .ui-page {
-    margin-top: 2em;
-    background-color: #c3c3c3;
-}
-
-.ui-page::before {
-    content: '';
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 50%;
-    left: 50%;
-    background: url(../img/logos/logo.png) no-repeat top center;
-    background-size: 50%;
-    will-change: transform;
-    z-index: 0;
-    transform: translate(-50%,-50%);
+    margin-top: 32px;
+    background-color: transparent;
 }
 
 /* MAIN MENU */
@@ -95,16 +104,99 @@
     margin: 0;
     background-color: #111!important;
     border: 1px solid #1a1a1a!important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .menu a.ui-btn i {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+    left: 0;
+    right: 0;
     font-size: 10vw;
     color: #fff;
 }
+
+/* EVENTS */
+.event-single:nth-of-type(1) {
+    border-top: 1px solid #c3c3c3;
+}
+.event-single {
+    border-bottom: 1px solid #c3c3c3;
+}
+
+/* LOADER */
+.preloader {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.loader {
+    display: block;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    width: 80px;
+    height: 80px;
+    margin: 0 0 0 -40px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #07C1E1;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+.loader:before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #BA55D3;
+    -webkit-animation: spin 3s linear infinite;
+    animation: spin 3s linear infinite;
+}
+.loader:after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #E50E65;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+}
+@-webkit-keyframes spin {
+    0%   {
+        -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    0%   {
+        -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
 
 @media only screen and (max-width: 767px) {
     .ui-page::before {

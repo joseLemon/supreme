@@ -27,9 +27,8 @@
 
 <div data-role="panel" id="lateral-menu" data-position="left" data-display="overlay" class="ui-panel ui-panel-position-left ui-panel-display-overlay ui-body-a ui-panel-animate ui-panel-closed">
     <div class="menu-optns">
-        <a href="" class="ui-btn">Página 1</a>
-        <a href="" class="ui-btn">Página 2</a>
-        <a href="" class="ui-btn">Página 3</a>
+        <a href="index.html" class="ui-btn">Inicio</a>
+        <a href="#" class="ui-btn load-events">Eventos</a>
     </div>
 </div>
 
@@ -37,25 +36,25 @@
     <div class="container">
         <!-- <div data-role="header"></div> -->
 
-        <div role="main" class="ui-content" id="main">
+        <div role="main" class="ui-content spacing" id="main">
             <div class="row">
                 <div class="col-6 col-md-4">
-                    <a href="pages/page1.html" class="ui-btn" data-prefetch>
+                    <a href="#" class="ui-btn load-events" data-prefetch>
                         <i class="far fa-calendar-alt"></i>
                     </a>
                 </div>
                 <div class="col-6 col-md-4">
-                    <a href="pages/page1.html" class="ui-btn" data-prefetch>
+                    <a href="#" class="ui-btn load-events" data-prefetch>
                         <i class="fas fa-microphone-alt"></i>
                     </a>
                 </div>
                 <div class="col-6 col-md-4">
-                    <a href="pages/page1.html" class="ui-btn" data-prefetch>
+                    <a href="#" class="ui-btn load-events" data-prefetch>
                         <i class="fas fa-ticket-alt"></i>
                     </a>
                 </div>
                 <div class="col-6 col-md-4">
-                    <a href="pages/page1.html" class="ui-btn" data-prefetch>
+                    <a href="#" class="ui-btn load-events" data-prefetch>
                         <i class="fas fa-map"></i>
                     </a>
                 </div>
@@ -67,13 +66,23 @@
 
 <div class="footer">
     <!---<script type="text/javascript" src="cordova.js"></script>-->
-    <!--<script type="text/javascript" src="js/index.js"></script>-->
+    <script type="text/javascript" src="js/index.js"></script>
     <script src="js/jquery-2.2.4.min.js"></script>
     <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
     <script type="text/javascript">
-        //app.initialize();
+        app.initialize();
         $(function() {
             $( "body>[data-role='panel']" ).panel();
+            $( ":mobile-pagecontainer" ).pagecontainer({
+                change: function( event, ui ) {
+                    if(ui.options.target == 'events.html'){
+                        events.getEventFiles();
+                    }
+                }
+            });
+        });
+        $( ".load-events" ).on( "click", function() {
+            $( ":mobile-pagecontainer" ).pagecontainer( "change", "events.html" )
         });
     </script>
     <script type="text/javascript" src="js/popper.js"></script>

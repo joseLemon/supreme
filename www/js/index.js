@@ -27,6 +27,7 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
+        window.addEventListener('filePluginIsReady', function(){ console.log('File plugin is ready');}, false);
     },
     // deviceready Event Handler
     //
@@ -47,3 +48,34 @@ var app = {
         console.log('Received Event: ' + id);
     }
 };
+
+var events = {
+    getEventFiles: function () {
+        var ev_ctnr = $('#events-list');
+        if(ev_ctnr.length !== 0) {
+            ev_ctnr.html('');
+            /*ev_ctnr.html(
+                '<div class="preloader">' +
+                '<div class="loader"></div>' +
+                '</div>'
+            );*/
+            $.getJSON("db/events/events.json", function (data) {
+                events.events_json = data;
+                //ev_ctnr.find('.preloader').fadeOut('fast');
+                $.each(data, function (index, value) {
+                    events.setEventContainer(ev_ctnr,value);
+                });
+            });
+        }
+    },
+    setEventContainer: function (main,event) {
+        main.append(
+            '<div class="row event-single">' +
+            '<div class="col-12 datetime"><span class="start">'+ event.start_time + '</span> - <span class="end">'+ event.end_time + '</span></div>' +
+            '<div class="col-12 title">'+ event.title + '</div>' +
+            '<div class="col-12 excerpt">'+ event.excerpt + '</div>' +
+            '</div>'
+        );
+    },
+    events_json: null
+}

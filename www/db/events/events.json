@@ -1,0 +1,22 @@
+{
+  "1": {
+    "title":"Evento 1",
+    "excerpt":"Descripción corta",
+    "desc":"Descripción",
+    "location":"Área 1",
+    "date":"2018-06-05",
+    "start_time":"18:00",
+    "end_time":"19:00",
+    "participants":["Didii"]
+  },
+  "2": {
+    "title":"Evento 2",
+    "excerpt":"Descripción corta",
+    "desc":"Descripción",
+    "location":"Área 2",
+    "date":"2018-06-05",
+    "start_time":"18:00",
+    "end_time":"19:00",
+    "participants":["José"]
+  }
+}
