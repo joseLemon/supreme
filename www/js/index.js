@@ -63,19 +63,105 @@ var events = {
                 events.events_json = data;
                 //ev_ctnr.find('.preloader').fadeOut('fast');
                 $.each(data, function (index, value) {
-                    events.setEventContainer(ev_ctnr,value);
+                    events.setEventContainer(ev_ctnr,value,index);
                 });
             });
         }
     },
-    setEventContainer: function (main,event) {
+    setEventContainer: function (main,event,index) {
         main.append(
             '<div class="row event-single">' +
-            '<div class="col-12 datetime"><span class="start">'+ event.start_time + '</span> - <span class="end">'+ event.end_time + '</span></div>' +
-            '<div class="col-12 title">'+ event.title + '</div>' +
-            '<div class="col-12 excerpt">'+ event.excerpt + '</div>' +
+            '<button class="col-12" onclick="events.setSelectedEvent('+index+')">' +
+            '<div class="datetime"><span class="start">'+ event.start_time + '</span> - <span class="end">'+ event.end_time + '</span></div>' +
+            '<div class="title">'+ event.title + '</div>' +
+            '<div class="excerpt">'+ event.excerpt + '</div>' +
+            '</button>' +
             '</div>'
         );
     },
-    events_json: null
+    setSelectedEvent: function (selected) {
+        events.selected_event = events.events_json[selected];
+        loadPage("event.html");
+    },
+    loadEvent: function () {
+        var ev = $('#single-event'),
+            title = ev.find('.title'),
+            datetime = ev.find('.datetime'),
+            location = ev.find('.location'),
+            description = ev.find('.description'),
+            participants = ev.find('.participants');
+        title.html(events.selected_event.title);
+        datetime.html(events.selected_event.date + ' ' + events.selected_event.start_time + ' - ' + events.selected_event.end_time);
+        location.html(events.selected_event.location);
+        description.html(events.selected_event.desc);
+        participants.html(events.selected_event.participants);
+    },
+    events_json: null,
+    selected_event: null
+}
+
+var map = {
+    getLocations: function () {
+        $.getJSON("db/map/locations.json", function (data) {
+            map.locations_json = data;
+        });
+    },
+    getLocationInfo: function (marker,location_id) {
+        var location = map.locations_json[location_id],
+            top = $('#map-container'),
+            bottom = $('#map .bottom-details');
+        $(marker).addClass('active');
+        bottom.find('.title').html(location.title);
+        bottom.find('.desc').html(location.desc);
+        bottom.addClass('shown');
+        top.addClass('shown');
+    },
+    closeDetails: function () {
+        var top = $('#map-container'),
+            bottom = $('#map .bottom-details'),
+            marker = $('.map-btn.active');
+        marker.removeClass('active');
+        bottom.removeClass('shown');
+        top.removeClass('shown');
+    },
+    locations_json: null
+}
+
+function loadPage(page) {
+    $( ":mobile-pagecontainer" ).pagecontainer( "change", page )
+}
+
+$(function() {
+    $( "body>[data-role='panel']" ).panel();
+    $( ":mobile-pagecontainer" ).pagecontainer({
+        change: function( event, ui ) {
+            var tgt = null;
+            if(typeof ui.options.direction === 'undefined')
+                tgt = ui.options.target;
+            else {
+                var hash = reverseString(ui.options.hash);
+                tgt = reverseString(hash.substr(0, hash.indexOf('/')));
+            }
+            if(tgt)
+                detectNav(tgt);
+        }
+    });
+});
+
+function detectNav(tgt) {
+    switch (tgt) {
+        case 'events.html':
+            events.getEventFiles();
+            break;
+        case 'event.html':
+            events.loadEvent();
+            break;
+        case 'map.html':
+            map.getLocations();
+            break
+    }
+}
+
+function reverseString(str) {
+    return str.split("").reverse().join("");
 }

@@ -10,16 +10,39 @@ body::before {
     z-index: 0;
 }
 
+.ui-content {
+    padding: 0;
+}
+
 .spacing {
-    margin: 30px 0;
+    /*margin: 30px 0;*/
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.no-spacing-bottom {
+    padding-bottom: 0;
 }
 
 .internal-spacing {
-    padding: 30px 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .no-margin {
     margin: 0;
+}
+
+.container {
+    padding: 0;
+}
+
+.full-min-height {
+    min-height: calc(100vh - 32px);
+}
+
+.overflow-hidden {
+    overflow: hidden;
 }
 
 /* MENU */
@@ -172,6 +195,79 @@ body::before {
     -webkit-animation: spin 1.5s linear infinite;
     animation: spin 1.5s linear infinite;
 }
+
+/* MAP */
+#map #floor-map {
+    position: relative;
+}
+
+#map #floor-map img {
+    width: 100%;
+}
+
+.map-btn {
+    position: absolute;
+    width: 72px!important;
+    background: none!important;
+    border: 0!important;
+    box-shadow: none!important;
+    outline: none!important;
+}
+
+.map-btn .fa-map-marker {
+    position: relative;
+    font-size: 45px;
+}
+
+.map-btn.active {
+    text-shadow: 0 0 5px #2ad!important;
+}
+
+.map-btn .fa-map-marker i {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    right: 0;
+    color: #fff;
+    font-size: 18px;
+}
+
+.map-btn#location-1 {
+    top: calc(16% - 33.75px);
+    left: calc(29% - 45px);
+}
+
+#map-container {
+    transition: height 300ms ease;
+}
+
+#map-container.shown {
+    height: calc(70vh - 62px);
+    overflow: hidden;
+}
+
+.bottom-details {
+    position: relative;
+    bottom: -100vh;
+    transition: all 300ms ease;
+    height: 0;
+    background: #d7d7dc;
+}
+
+.bottom-details.shown {
+    bottom: 0;
+    height: 30vh;
+}
+
+.bottom-details .close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 18px;
+    width: auto;
+    background: transparent;
+}
+
 @-webkit-keyframes spin {
     0%   {
         -webkit-transform: rotate(0deg);
