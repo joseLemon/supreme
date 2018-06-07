@@ -1,0 +1,18 @@
+{
+  "1": {
+    "name":"Didii",
+    "desc":"Organizadora del evento Supreme Fest. La chica más Kawaii del evento.",
+    "contact": {
+      "mail":"correo@mail.com",
+      "phone":"4101010"
+    }
+  },
+  "2": {
+    "name":"José",
+    "desc":"Desarrollador de apps chidas. No tan kawaii.",
+    "contact": {
+      "mail":"correo@mail.com",
+      "phone":"4101010"
+    }
+  }
+}

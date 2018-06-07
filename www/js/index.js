@@ -71,7 +71,7 @@ var events = {
     setEventContainer: function (main,event,index) {
         main.append(
             '<div class="row event-single">' +
-            '<button class="col-12" onclick="events.setSelectedEvent('+index+')">' +
+            '<button class="ui-btn no-margin" onclick="events.setSelectedEvent('+index+')">' +
             '<div class="datetime"><span class="start">'+ event.start_time + '</span> - <span class="end">'+ event.end_time + '</span></div>' +
             '<div class="title">'+ event.title + '</div>' +
             '<div class="excerpt">'+ event.excerpt + '</div>' +
@@ -79,8 +79,8 @@ var events = {
             '</div>'
         );
     },
-    setSelectedEvent: function (selected) {
-        events.selected_event = events.events_json[selected];
+    setSelectedEvent: function (id) {
+        events.selected_event = events.events_json[id];
         loadPage("event.html");
     },
     loadEvent: function () {
@@ -89,15 +89,83 @@ var events = {
             datetime = ev.find('.datetime'),
             location = ev.find('.location'),
             description = ev.find('.description'),
-            participants = ev.find('.participants');
+            partArr = [];
         title.html(events.selected_event.title);
         datetime.html(events.selected_event.date + ' ' + events.selected_event.start_time + ' - ' + events.selected_event.end_time);
         location.html(events.selected_event.location);
         description.html(events.selected_event.desc);
-        participants.html(events.selected_event.participants);
+        events.selected_event.participants.forEach(function (id) {
+            participants.getParticipantInfo(id,events.setParticipants);
+        });
+    },
+    setParticipants: function (id,el) {
+        var participants = $('#single-event').find('.participants');
+        participants.append('<div><button class="ui-btn no-margin" onclick="participants.setSelectedParticipant('+id+')">' + el.name + '</button></div>');
     },
     events_json: null,
     selected_event: null
+}
+
+var participants = {
+    getParticipantFiles: function () {
+        var par_ctnr = $('#participants-list');
+        if(par_ctnr.length !== 0) {
+            par_ctnr.html('');
+            $.getJSON("db/participants/participants.json", function (data) {
+                participants.participants_json = data;
+                $.each(data, function (index, value) {
+                    participants.setParticipantContainer(par_ctnr,value,index);
+                });
+            });
+        }
+    },
+    setParticipantContainer: function (main,event,index) {
+        main.append(
+            '<div class="row event-single">' +
+            '<button class="ui-btn no-margin" onclick="participants.setSelectedParticipant('+index+')">' +
+            /*'<div class="datetime"><span class="start">'+ event.start_time + '</span> - <span class="end">'+ event.end_time + '</span></div>' +
+            '<div class="title">'+ event.title + '</div>' +
+            '<div class="excerpt">'+ event.excerpt + '</div>' +
+            '</button>' +*/
+            '</div>'
+        );
+    },
+    setSelectedParticipant: function (id) {
+        participants.selected_participant = participants.participants_json[id];
+        console.log(participants.selected_participant);
+        loadPage("participant.html");
+    },
+    getParticipantInfo: function (id,callback) {
+        $.getJSON("db/participants/participants.json", function (data) {
+            participants.participants_json = data;
+            participants.selected_participant = data[id];
+        }).then(function () {
+            callback(id,participants.selected_participant);
+        });
+    },
+    loadParticipant: function () {
+        var par = $('#single-event'),
+            name = par.find('.name'),
+            description = par.find('.description'),
+            phone = par.find('.phone'),
+            email = par.find('.email'),
+            evArr = [];
+        console.log(participants.selected_participant);
+        name.html(participants.selected_participant.name);
+        description.html(participants.selected_participant.desc);
+        phone.html(participants.selected_participant.contact.phone);
+        email.html(participants.selected_participant.contact.email);
+        $.getJSON("db/events/events.json", function (index) {
+            /*$.each(data, function (index, value) {
+                events.setEventContainer(ev_ctnr,value,index);
+            });*/
+            var events = Object.keys(data).filter(function(i) {
+                return data[i].participants == ;
+            });
+        });
+    },
+    participants_json: null,
+    selected_participant: null
 }
 
 var map = {
@@ -159,6 +227,9 @@ function detectNav(tgt) {
         case 'map.html':
             map.getLocations();
             break
+        case 'participant.html':
+            participants.loadParticipant();
+            break;
     }
 }
 
