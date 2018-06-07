@@ -122,18 +122,17 @@ body::before {
 
 .menu a.ui-btn {
     width: 100%;
-    padding: 50% 0;
+    padding: calc(50% - 5vw) 0;
     position: relative;
     margin: 0;
     background-color: #111!important;
     border: 1px solid #1a1a1a!important;
-    display: flex;
+    /*display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center;*/
 }
 
 .menu a.ui-btn i {
-    position: absolute;
     left: 0;
     right: 0;
     font-size: 10vw;
@@ -301,10 +300,20 @@ body::before {
     .menu a.ui-btn i {
         font-size: 120px;
     }
+    .menu a.ui-btn {
+        padding: calc(50% - 60px) 0;
+    }
 }
 
 @media only screen and (max-width: 480px) {
     .menu a.ui-btn i {
         font-size: 80px;
     }
+    .menu a.ui-btn {
+        padding: calc(50% - 40px) 0;
+    }
+}
+
+@media (orientation: landscape) {
+
 }
