@@ -272,6 +272,26 @@ body::before {
     left: calc(36% - 45px);
 }
 
+/* PARTICIPANTS */
+#single-participant .img-container {
+    position: relative;
+    height: 100px;
+}
+
+#single-participant .img-container i {
+    font-size: 70px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    top: 0;
+    bottom: 0;
+}
+
+#single-participant .img-container i:before {
+    vertical-align: middle;
+}
+
 @-webkit-keyframes spin {
     0%   {
         -webkit-transform: rotate(0deg);

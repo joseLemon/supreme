@@ -1,5 +1,6 @@
 {
   "1": {
+    "participant_id":1,
     "name":"Didii",
     "desc":"Organizadora del evento Supreme Fest. La chica más Kawaii del evento.",
     "contact": {
@@ -8,6 +9,7 @@
     }
   },
   "2": {
+    "participant_id":2,
     "name":"José",
     "desc":"Desarrollador de apps chidas. No tan kawaii.",
     "contact": {

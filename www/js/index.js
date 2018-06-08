@@ -50,7 +50,17 @@ var app = {
 };
 
 var events = {
-    getEventFiles: function () {
+    getEvents: function (main_load,callback) {
+        $.getJSON("db/events/events.json", function (data) {
+            events.events_json = data;
+        }).then(function () {
+            if(main_load)
+                events.setEventsInfo();
+            if(callback)
+                callback();
+        });
+    },
+    setEventsInfo: function () {
         var ev_ctnr = $('#events-list');
         if(ev_ctnr.length !== 0) {
             ev_ctnr.html('');
@@ -59,14 +69,20 @@ var events = {
                 '<div class="loader"></div>' +
                 '</div>'
             );*/
-            $.getJSON("db/events/events.json", function (data) {
-                events.events_json = data;
-                //ev_ctnr.find('.preloader').fadeOut('fast');
-                $.each(data, function (index, value) {
-                    events.setEventContainer(ev_ctnr,value,index);
-                });
+            //ev_ctnr.find('.preloader').fadeOut('fast');
+            $.each(events.events_json, function (index, value) {
+                events.setEventContainer(ev_ctnr,value,index);
             });
         }
+    },
+    getEventInfo: function (id,callback) {
+        var ev;
+        $.getJSON("db/events/events.json", function (data) {
+            events.events_json = data;
+            ev = data[id];
+        }).then(function () {
+            callback(id,ev);
+        });
     },
     setEventContainer: function (main,event,index) {
         main.append(
@@ -99,70 +115,89 @@ var events = {
         });
     },
     setParticipants: function (id,el) {
-        var participants = $('#single-event').find('.participants');
-        participants.append('<div><button class="ui-btn no-margin" onclick="participants.setSelectedParticipant('+id+')">' + el.name + '</button></div>');
+        var ptcpts = $('#single-event').find('.participants');
+        ptcpts.append('<div><button class="ui-btn no-margin" onclick="participants.setSelectedParticipant('+id+')">' + el.name + '</button></div>');
     },
     events_json: null,
     selected_event: null
 }
 
 var participants = {
-    getParticipantFiles: function () {
+    getParticipants: function (main_load) {
+        $.getJSON("db/participants/participants.json", function (data) {
+            participants.participants_json = data;
+        }).then(function () {
+            participants.setParticipantsInfo();
+        });
+
+    },
+    setParticipantsInfo: function () {
         var par_ctnr = $('#participants-list');
         if(par_ctnr.length !== 0) {
             par_ctnr.html('');
-            $.getJSON("db/participants/participants.json", function (data) {
-                participants.participants_json = data;
-                $.each(data, function (index, value) {
-                    participants.setParticipantContainer(par_ctnr,value,index);
-                });
+            $.each(participants.participants_json, function (index, value) {
+                participants.setParticipantContainer(par_ctnr,value,index);
             });
         }
     },
-    setParticipantContainer: function (main,event,index) {
+    getParticipantInfo: function (id,callback) {
+        var par;
+        $.getJSON("db/participants/participants.json", function (data) {
+            participants.participants_json = data;
+            par = data[id];
+        }).then(function () {
+            callback(id,par);
+        });
+    },
+    setParticipantContainer: function (main,participant,index) {
         main.append(
             '<div class="row event-single">' +
             '<button class="ui-btn no-margin" onclick="participants.setSelectedParticipant('+index+')">' +
-            /*'<div class="datetime"><span class="start">'+ event.start_time + '</span> - <span class="end">'+ event.end_time + '</span></div>' +
-            '<div class="title">'+ event.title + '</div>' +
-            '<div class="excerpt">'+ event.excerpt + '</div>' +
-            '</button>' +*/
+            '<div class="name">'+ participant.name + '</div>' +
+            '</button>' +
             '</div>'
         );
     },
     setSelectedParticipant: function (id) {
         participants.selected_participant = participants.participants_json[id];
-        console.log(participants.selected_participant);
         loadPage("participant.html");
     },
-    getParticipantInfo: function (id,callback) {
-        $.getJSON("db/participants/participants.json", function (data) {
-            participants.participants_json = data;
-            participants.selected_participant = data[id];
-        }).then(function () {
-            callback(id,participants.selected_participant);
-        });
-    },
     loadParticipant: function () {
-        var par = $('#single-event'),
+        if($.isEmptyObject(events.events_json)) {
+            events.getEvents(false,participants.mapEventsToParticipant);
+        } else {
+            participants.mapEventsToParticipant();
+        }
+    },
+    mapEventsToParticipant: function () {
+        var par = $('#single-participant'),
             name = par.find('.name'),
             description = par.find('.description'),
             phone = par.find('.phone'),
-            email = par.find('.email'),
-            evArr = [];
-        console.log(participants.selected_participant);
+            email = par.find('.email');
         name.html(participants.selected_participant.name);
         description.html(participants.selected_participant.desc);
         phone.html(participants.selected_participant.contact.phone);
         email.html(participants.selected_participant.contact.email);
-        $.getJSON("db/events/events.json", function (index) {
-            /*$.each(data, function (index, value) {
-                events.setEventContainer(ev_ctnr,value,index);
-            });*/
-            var events = Object.keys(data).filter(function(i) {
-                return data[i].participants == ;
-            });
+        var ev_arr = $.map(events.events_json, function(value, index) {
+                return [value];
+            }),
+            par_ev = [];
+        ev_arr.forEach(function (el) {
+            var find = el.participants.indexOf(participants.selected_participant.participant_id);
+            if(find !== -1) {
+                par_ev.push(el.event_id);
+            }
         });
+        par_ev.forEach(function (id) {
+            //console.log('sending: '+id);
+            events.getEventInfo(id,participants.setEvents);
+        });
+    },
+    setEvents: function (id,el) {
+        //console.log('received: '+id); sometimes received out of order (async function?)
+        var evts = $('#single-participant').find('.events');
+        evts.append('<div><button class="ui-btn no-margin" onclick="events.setSelectedEvent('+id+')">' + el.title + '</button></div>');
     },
     participants_json: null,
     selected_participant: null
@@ -219,14 +254,17 @@ $(function() {
 function detectNav(tgt) {
     switch (tgt) {
         case 'events.html':
-            events.getEventFiles();
+            events.getEvents(true);
             break;
         case 'event.html':
             events.loadEvent();
             break;
         case 'map.html':
             map.getLocations();
-            break
+            break;
+        case 'participants.html':
+            participants.getParticipants(true);
+            break;
         case 'participant.html':
             participants.loadParticipant();
             break;

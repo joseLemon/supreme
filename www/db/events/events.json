@@ -1,5 +1,6 @@
 {
   "1": {
+    "event_id":1,
     "title":"Evento 1",
     "excerpt":"Descripción corta",
     "desc":"Descripción",
@@ -10,6 +11,7 @@
     "participants":[1,2]
   },
   "2": {
+    "event_id":2,
     "title":"Evento 2",
     "excerpt":"Descripción corta",
     "desc":"Descripción",
