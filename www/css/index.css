@@ -197,9 +197,19 @@ body::before {
 
 /* MAP */
 #map #floor-map {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    transition: all 300ms ease;
+}
+
+#map-container.shown > #floor-map {
     position: relative;
-    /*height: 100%;
-    transition: all 300ms ease;*/
+    top: 0;
+    transform: none;
 }
 
 #map #floor-map img {
@@ -237,12 +247,14 @@ body::before {
 
 #map-container {
     transition: height 300ms ease;
-    max-height: calc(100vh - 122px);
+    height: calc(100vh - 122px);
+    position: relative;
 }
 
 #map-container.shown {
-    height: calc(70vh - 62px);
-    overflow: hidden;
+    height: calc(70vh - 32px);
+    overflow: auto;
+    padding: 30px 0;
 }
 
 .bottom-details {
