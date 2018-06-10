@@ -27,17 +27,30 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
-        window.addEventListener('filePluginIsReady', function(){ console.log('File plugin is ready');}, false);
     },
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+        //app.receivedEvent('deviceready');
+        setTimeout(function () {
+            console.log('show img');
+            var loading =  $('.loading-screen');
+            loading.addClass('shown');
+            setTimeout(function () {
+                console.log('hide loading screen');
+                //loading.find('.ui-panel-inner').append('<h1>READY</h1>');
+                loading.addClass('hidden');
+                $('body').removeClass('overflow-hidden');
+                setTimeout(function () {
+                    loading.removeClass('loading-screen');
+                },300);
+            },1000);
+        },200);
     },
     // Update DOM on a Received Event
-    receivedEvent: function(id) {
+    /*receivedEvent: function(id) {
         var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
@@ -46,7 +59,7 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
-    }
+    }*/
 };
 
 var events = {
@@ -110,9 +123,11 @@ var events = {
         datetime.html(events.selected_event.date + ' ' + events.selected_event.start_time + ' - ' + events.selected_event.end_time);
         location.html(events.selected_event.location);
         description.html(events.selected_event.desc);
-        events.selected_event.participants.forEach(function (id) {
-            participants.getParticipantInfo(id,events.setParticipants);
-        });
+        if(events.selected_event.participants) {
+            events.selected_event.participants.forEach(function (id) {
+                participants.getParticipantInfo(id,events.setParticipants);
+            });
+        }
     },
     setParticipants: function (id,el) {
         var ptcpts = $('#single-event').find('.participants');
@@ -129,7 +144,6 @@ var participants = {
         }).then(function () {
             participants.setParticipantsInfo();
         });
-
     },
     setParticipantsInfo: function () {
         var par_ctnr = $('#participants-list');
@@ -184,9 +198,11 @@ var participants = {
             }),
             par_ev = [];
         ev_arr.forEach(function (el) {
-            var find = el.participants.indexOf(participants.selected_participant.participant_id);
-            if(find !== -1) {
-                par_ev.push(el.event_id);
+            if(el.participants) {
+                var find = el.participants.indexOf(participants.selected_participant.participant_id);
+                if(find !== -1) {
+                    par_ev.push(el.event_id);
+                }
             }
         });
         par_ev.forEach(function (id) {
