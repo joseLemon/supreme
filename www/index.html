@@ -32,7 +32,7 @@
         <a href="index.html" class="ui-btn">Inicio</a>
         <a href="#" class="ui-btn load-events">Agenda</a>
         <a href="#" class="ui-btn load-participants">Invitados</a>
-        <a href="#" class="ui-btn load">Actividades</a>
+        <a href="#" class="ui-btn load-activities">Actividades</a>
         <a href="#" class="ui-btn load">Boletos</a>
         <a href="#" class="ui-btn load-map">Mapa</a>
         <a href="#" class="ui-btn">Contacto</a>
@@ -44,22 +44,22 @@
         <!-- <div data-role="header"></div> -->
         <div role="main" class="ui-content spacing internal-spacing" id="main">
             <div class="row no-margin">
-                <div class="col-6 col-md-4">
+                <div class="col-6 col-md-4 offset-md-2">
                     <a href="#" class="ui-btn load-events" data-prefetch>
                         <i class="far fa-calendar-alt"></i>
                     </a>
                 </div>
-                <div class="col-6 col-md-4">
+                <div class="col-6 col-md-4 col-lg-4">
                     <a href="#" class="ui-btn load-participants" data-prefetch>
                         <i class="fas fa-microphone-alt"></i>
                     </a>
                 </div>
-                <div class="col-6 col-md-4">
+                <div class="col-6 col-md-4 offset-md-2">
                     <a href="#" class="ui-btn" data-prefetch>
                         <i class="fas fa-ticket-alt"></i>
                     </a>
                 </div>
-                <div class="col-6 col-md-4">
+                <div class="col-6 col-md-4 col-lg-4">
                     <a href="map.html" class="ui-btn load-map" data-prefetch>
                         <i class="fas fa-map"></i>
                     </a>
@@ -81,6 +81,9 @@
         app.initialize();
         $( ".load-events" ).on( "click", function() {
             loadPage("events.html");
+        });
+        $( ".load-activities" ).on( "click", function() {
+            loadPage("activities.html");
         });
         $( ".load-map" ).on( "click", function() {
             loadPage("map.html");

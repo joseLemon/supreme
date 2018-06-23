@@ -1,0 +1,13 @@
+{
+  "1": {
+    "event_id":1,
+    "title":"Actividad",
+    "excerpt":"Descripción corta",
+    "desc":"Descripción",
+    "location":"Área 1",
+    "date":"2018-06-10",
+    "start_time":"18:00",
+    "end_time":"19:00",
+    "participants":[1]
+  }
+}
