@@ -240,11 +240,19 @@ var map = {
         var location = map.locations_json[location_id],
             top = $('#map-container'),
             bottom = $('#map .bottom-details');
-        $(marker).addClass('active');
         bottom.find('.title').html(location.title);
         bottom.find('.desc').html(location.desc);
         bottom.addClass('shown');
         top.addClass('shown');
+        if(!$(marker).hasClass('active')) {
+            setTimeout(function () {
+                top.animate({scrollTop: ($(marker).position().top) - (top.height()/2)},500,'swing');
+            },300);
+        } else {
+            top.animate({scrollTop: ($(marker).position().top) - (top.height()/2)},500,'swing');
+        }
+        $('.map-btn.active').removeClass('active');
+        $(marker).addClass('active');
     },
     closeDetails: function () {
         var top = $('#map-container'),
