@@ -34,7 +34,7 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         //app.receivedEvent('deviceready');
-        setTimeout(function () {
+       /* setTimeout(function () {
             console.log('show img');
             var loading =  $('.loading-screen');
             loading.addClass('shown');
@@ -47,7 +47,7 @@ var app = {
                     loading.removeClass('loading-screen');
                 },300);
             },1000);
-        },200);
+        },200);*/
     },
     // Update DOM on a Received Event
     /*receivedEvent: function(id) {
@@ -64,7 +64,7 @@ var app = {
 
 var events = {
     getEvents: function (main_load,callback) {
-        $.getJSON("db/events/events.json", function (data) {
+        $.getJSON(events.file, function (data) {
             events.events_json = data;
         }).then(function () {
             if(main_load)
@@ -90,7 +90,7 @@ var events = {
     },
     getEventInfo: function (id,callback) {
         var ev;
-        $.getJSON("db/events/events.json", function (data) {
+        $.getJSON(events.file, function (data) {
             events.events_json = data;
             ev = data[id];
         }).then(function () {
@@ -134,8 +134,19 @@ var events = {
         ptcpts.append('<div><button class="ui-btn no-margin" onclick="participants.setSelectedParticipant('+id+')">' + el.name + '</button></div>');
     },
     events_json: null,
-    selected_event: null
-}
+    selected_event: null,
+    db_filter: function (filter) {
+        switch (filter) {
+            case 'events':
+                events.file = "db/events/events.json";
+                break;
+            case 'activities':
+                events.file = "db/events/activities.json";
+                break;
+        }
+    },
+    file: null
+};
 
 var participants = {
     getParticipants: function (main_load) {
@@ -217,7 +228,7 @@ var participants = {
     },
     participants_json: null,
     selected_participant: null
-}
+};
 
 var map = {
     getLocations: function () {
@@ -229,11 +240,19 @@ var map = {
         var location = map.locations_json[location_id],
             top = $('#map-container'),
             bottom = $('#map .bottom-details');
-        $(marker).addClass('active');
         bottom.find('.title').html(location.title);
         bottom.find('.desc').html(location.desc);
         bottom.addClass('shown');
         top.addClass('shown');
+        if(!$(marker).hasClass('active')) {
+            setTimeout(function () {
+                top.animate({scrollTop: ($(marker).position().top) - (top.height()/2)},500,'swing');
+            },300);
+        } else {
+            top.animate({scrollTop: ($(marker).position().top) - (top.height()/2)},500,'swing');
+        }
+        $('.map-btn.active').removeClass('active');
+        $(marker).addClass('active');
     },
     closeDetails: function () {
         var top = $('#map-container'),
@@ -244,7 +263,7 @@ var map = {
         top.removeClass('shown');
     },
     locations_json: null
-}
+};
 
 function loadPage(page) {
     $( ":mobile-pagecontainer" ).pagecontainer( "change", page )
@@ -270,10 +289,15 @@ $(function() {
 function detectNav(tgt) {
     switch (tgt) {
         case 'events.html':
+            events.db_filter("events");
             events.getEvents(true);
             break;
         case 'event.html':
             events.loadEvent();
+            break;
+        case 'activities.html':
+            events.db_filter("activities");
+            events.getEvents(true);
             break;
         case 'map.html':
             map.getLocations();
