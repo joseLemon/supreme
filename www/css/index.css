@@ -42,7 +42,7 @@ html::before {
 }
 
 .full-min-height {
-    min-height: calc(100vh - 32px);
+    min-height: calc(90vh - 32px);
 }
 
 .overflow-hidden {
@@ -68,9 +68,40 @@ html::before {
     padding: 0;
 }
 
-.status-bar {
+.status-bar,
+.footer-bar {
     position: fixed;
     width: 100%;
+}
+
+.footer-bar {
+    bottom: 0;
+}
+
+.footer-bar .panel-heading {
+    background: url("../img/footer/fondo.png") no-repeat center center;
+    background-size: cover;
+    height: auto;
+    text-align: center;
+}
+
+.footer-bar .panel-heading div[class*=col]:nth-of-type(1) img,
+.footer-bar .panel-heading div[class*=col]:nth-of-type(3) img {
+    /*max-height: 100%;*/
+    /*max-height: calc(5vh - 8px);*/
+}
+
+.footer-bar .panel-heading div[class*=col]:nth-of-type(2) img {
+    /*max-height: 100%;*/
+    /*max-height: calc(10vh - 8px);*/
+}
+
+.footer-bar .panel-heading img {
+    max-height: calc(10vh - 8px);
+}
+
+.footer-bar .panel-heading .row > .col-4 {
+    padding: 4px 2px;
 }
 
 .panel-heading {
@@ -103,14 +134,15 @@ html::before {
     background-color: #1e282c;
 }
 
-#status {
+#status,
+#footer {
     z-index: 5;
 }
 
 #lateral-menu {
     position: fixed;
     margin-top: 32px;
-    min-height: calc(100% - 32px);
+    min-height: calc(90% - 32px);
 }
 
 /* LOADING */
@@ -253,6 +285,7 @@ html::before {
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #7f7f7f;
 }
 
 #map #floor-map {
