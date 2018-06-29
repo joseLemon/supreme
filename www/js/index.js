@@ -314,3 +314,37 @@ function detectNav(tgt) {
 function reverseString(str) {
     return str.split("").reverse().join("");
 }
+
+$(function () {
+    // Set the date being counted down
+    var countDownDate = new Date("Dec 22, 2018").getTime(),
+        // Update the count down every second
+        x = setInterval(function () {
+            // Get today's date and time
+            var now = new Date().getTime(),
+                // Find the distance between now and the count down date
+                distance = countDownDate - now,
+                // Time calculations for days, hours, minutes and seconds
+                days = setMinTwoDigitNum(Math.floor(distance / (1000 * 60 * 60 * 24))),
+                hours = setMinTwoDigitNum(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))),
+                minutes = setMinTwoDigitNum(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))),
+                seconds = setMinTwoDigitNum(Math.floor((distance % (1000 * 60)) / 1000)),
+                time_container = $('#countdown time');
+
+            // Set count down value on iteration
+            time_container.text(days + ':' + hours + ':' + minutes + ':' + seconds);
+
+            // If the count down is finished, set count down to 00:00:00:00
+            if(distance < 0) {
+                clearInterval(x);
+                time_container.text('00:00:00:00');
+            }
+        }, 1000);
+});
+
+function setMinTwoDigitNum(number) {
+    number = number.toString();
+    if(number.length < 2)
+        number = '0'+number;
+    return number
+}
