@@ -1,0 +1,21 @@
+{
+  "name": "com.supremefest.app",
+  "version": "1.0.0",
+  "displayName": "Supreme Fest 2018",
+  "cordova": {
+    "platforms": [
+      "browser"
+    ],
+    "plugins": {
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-file": {},
+      "cordova-plugin-email-composer": {}
+    }
+  },
+  "dependencies": {
+    "cordova-browser": "~5.0.3",
+    "cordova-plugin-splashscreen": "~5.0.2",
+    "cordova-plugin-file": "~6.0.1",
+    "cordova-plugin-email-composer": "~0.8.15"
+  }
+}

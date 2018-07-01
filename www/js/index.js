@@ -33,21 +33,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        //app.receivedEvent('deviceready');
-       /* setTimeout(function () {
-            console.log('show img');
-            var loading =  $('.loading-screen');
-            loading.addClass('shown');
-            setTimeout(function () {
-                console.log('hide loading screen');
-                //loading.find('.ui-panel-inner').append('<h1>READY</h1>');
-                loading.addClass('hidden');
-                $('body').removeClass('overflow-hidden');
-                setTimeout(function () {
-                    loading.removeClass('loading-screen');
-                },300);
-            },1000);
-        },200);*/
+        console.log(cordova.plugins.email);
     },
     // Update DOM on a Received Event
     /*receivedEvent: function(id) {
@@ -61,6 +47,44 @@ var app = {
         console.log('Received Event: ' + id);
     }*/
 };
+
+var onlineStatus = navigator.onLine;
+
+var contact = {
+    submit: function () {
+        $('form').submit(function (e) {
+            e.preventDefault();
+            contact.sendEmail($(this));
+        });
+    },
+    sendEmail: function (form) {
+        var name = form.find('input[name=name]'),
+            email = form.find('input[name=email]'),
+            msg = form.find('textarea[name=msg]');
+
+        cordova.plugins.email.open({
+            to:      'pepe.lujan2@gmail.com',
+            cc:      email.val(),
+            subject: 'Mensaje enviado desde la forma de contacto de la app de SupremeFest',
+            body:    "Nombre: " + name.val() + "\n" + "Mensage: " + msg.val()
+        });
+
+        name.val('').removeClass('has-content');
+        email.val('').removeClass('has-content');
+        msg.val('').removeClass('has-content');
+    },
+    inputEvents: function () {
+        $('input,textarea').not(':input[type=submit]').blur(function () {
+            var inp = $(this),
+                val = inp.val();
+
+            if(val !== '')
+                inp.addClass('has-content');
+            else
+                inp.removeClass('has-content');
+        });
+    }
+}
 
 var events = {
     getEvents: function (main_load,callback) {
@@ -307,6 +331,17 @@ function detectNav(tgt) {
             break;
         case 'participant.html':
             participants.loadParticipant();
+            break;
+        case 'contact.html':
+            onlineStatus = navigator.onLine;
+            if(!onlineStatus) {
+                $('form,.google-map iframe').addClass('hidden');
+                $('.google-map').addClass('bg-img');
+            } else {
+                $('.hidden').removeClass('hidden');
+                contact.inputEvents();
+                contact.submit();
+            }
             break;
     }
 }
