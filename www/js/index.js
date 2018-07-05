@@ -87,13 +87,24 @@ var contact = {
 }
 
 var events = {
-    getEvents: function (main_load,callback) {
+    getEvents: function (main_load,callback,get_both) {
         $.getJSON(events.file, function (data) {
             events.events_json = data;
+             console.log(events.events_json);
         }).then(function () {
             if(main_load)
                 events.setEventsInfo();
-            if(callback)
+            if(get_both) {
+                events.db_filter("activities");
+                $.getJSON(events.file, function (data) {
+                    events.activities_json = data;
+                     console.log(events.activities_json);
+                }).then(function () {
+                    if(callback)
+                        callback();
+                });
+            }
+            else if(callback)
                 callback();
         });
     },
@@ -112,19 +123,20 @@ var events = {
             });
         }
     },
-    getEventInfo: function (id,callback) {
+    getEventInfo: function (id,obj_ref,type,callback) {
         var ev;
+        events.db_filter(type);
         $.getJSON(events.file, function (data) {
-            events.events_json = data;
+            events[obj_ref] = data;
             ev = data[id];
         }).then(function () {
-            callback(id,ev);
+            callback(id,obj_ref,type,ev);
         });
     },
     setEventContainer: function (main,event,index) {
         main.append(
             '<div class="row event-single">' +
-            '<button class="ui-btn no-margin" onclick="events.setSelectedEvent('+index+')">' +
+            '<button class="ui-btn no-margin" onclick="events.setSelectedEvent('+index+',\'events_json\')">' +
             '<div class="datetime"><span class="start">'+ event.start_time + '</span> - <span class="end">'+ event.end_time + '</span></div>' +
             '<div class="title">'+ event.title + '</div>' +
             '<div class="excerpt">'+ event.excerpt + '</div>' +
@@ -132,8 +144,8 @@ var events = {
             '</div>'
         );
     },
-    setSelectedEvent: function (id) {
-        events.selected_event = events.events_json[id];
+    setSelectedEvent: function (id,obj_ref) {
+        events.selected_event = events[obj_ref][id];
         loadPage("event.html");
     },
     loadEvent: function () {
@@ -158,6 +170,7 @@ var events = {
         ptcpts.append('<div><button class="ui-btn no-margin" onclick="participants.setSelectedParticipant('+id+')">' + el.name + '</button></div>');
     },
     events_json: null,
+    activities_json: null,
     selected_event: null,
     db_filter: function (filter) {
         switch (filter) {
@@ -212,11 +225,12 @@ var participants = {
         loadPage("participant.html");
     },
     loadParticipant: function () {
-        if($.isEmptyObject(events.events_json)) {
-            events.getEvents(false,participants.mapEventsToParticipant);
-        } else {
+        //if($.isEmptyObject(events.events_json)) {
+        events.db_filter("events");
+        events.getEvents(false,participants.mapEventsToParticipant,true);
+        /*} else {
             participants.mapEventsToParticipant();
-        }
+        }*/
     },
     mapEventsToParticipant: function () {
         var par = $('#single-participant'),
@@ -228,7 +242,21 @@ var participants = {
         description.html(participants.selected_participant.desc);
         phone.html(participants.selected_participant.contact.phone);
         email.html(participants.selected_participant.contact.email);
-        var ev_arr = $.map(events.events_json, function(value, index) {
+
+        participants.mappingFunction('events');
+        participants.mappingFunction('activities');
+    },
+    mappingFunction: function (type) {
+        var params = [];
+        switch (type) {
+            case 'events':
+                params.push('events_json');
+                break;
+            case 'activities':
+                params.push('activities_json');
+                break;
+        }
+        var ev_arr = $.map(events[params[0]], function(value, index) {
                 return [value];
             }),
             par_ev = [];
@@ -242,13 +270,16 @@ var participants = {
         });
         par_ev.forEach(function (id) {
             //console.log('sending: '+id);
-            events.getEventInfo(id,participants.setEvents);
+            events.getEventInfo(id,params[0],type,participants.setEvents);
         });
     },
-    setEvents: function (id,el) {
+    setEvents: function (id,obj_ref,type,el) {
         //console.log('received: '+id); sometimes received out of order (async function?)
-        var evts = $('#single-participant').find('.events');
-        evts.append('<div><button class="ui-btn no-margin" onclick="events.setSelectedEvent('+id+')">' + el.title + '</button></div>');
+        var evts = $('#single-participant').find('.'+type),
+            evts_ctnr = evts.closest('section');
+        if(evts_ctnr.hasClass('d-none'))
+            evts_ctnr.removeClass('d-none');
+        evts.append('<div><button class="ui-btn no-margin" onclick="events.setSelectedEvent('+id+',\''+obj_ref+'\')">' + el.title + '</button></div>');
     },
     participants_json: null,
     selected_participant: null
@@ -335,10 +366,10 @@ function detectNav(tgt) {
         case 'contact.html':
             onlineStatus = navigator.onLine;
             if(!onlineStatus) {
-                $('form,.google-map iframe').addClass('hidden');
+                $('form,.google-map iframe').addClass('d-none');
                 $('.google-map').addClass('bg-img');
             } else {
-                $('.hidden').removeClass('hidden');
+                $('.d-none').removeClass('d-none');
                 contact.inputEvents();
                 contact.submit();
             }
@@ -367,7 +398,7 @@ $(function () {
                 time_container = $('#countdown time');
 
             // Set count down value on iteration
-            time_container.text(days + ':' + hours + ':' + minutes + ':' + seconds);
+            time_container.text(days + 'd:' + hours + 'h:' + minutes + 'm:' + seconds + 's');
 
             // If the count down is finished, set count down to 00:00:00:00
             if(distance < 0) {
