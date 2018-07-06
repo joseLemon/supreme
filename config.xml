@@ -11,8 +11,29 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="14" />
     <preference name="orientation" value="portrait" />
-    <preference name="SplashScreen" value="screen" />
+    <plugin name="cordova-plugin-email-composer" spec="~0.8.15" />
     <preference name="phonegap-version" value="cli-7.0.1" />
+    <plugin name="cordova-plugin-splashscreen" spec="~5.0.2" />
+    <preference name="SplashScreen" value="screen" />
+    <!--
+
+    phonegap splashscreen
+    <splash src="res/screen/android/drawable-port-ldpi-screen.png" platform="android" qualifier="ldpi" />
+    <splash src="res/screen/android/drawable-port-mdpi-screen.png" platform="android" qualifier="mdpi" />
+    <splash src="res/screen/android/drawable-port-hdpi-screen.png" platform="android" qualifier="hdpi" />
+    <splash src="res/screen/android/drawable-port-xhdpi-screen.png" platform="android" qualifier="xhdpi" />
+    <splash src="res/screen/android/drawable-port-xxhdpi-screen.png" platform="android" qualifier="port-xxhdpi" />
+    <splash src="res/screen/android/drawable-port-xxxhdpi-screen.png" platform="android" qualifier="xxxhdpi" />
+
+    phonegap icons
+    <icon src="res/icon/android/drawable-ldpi-icon.png" platform="android" qualifier="ldpi" />
+    <icon src="res/icon/android/drawable-mdpi-icon.png" platform="android" qualifier="mdpi" />
+    <icon src="res/icon/android/drawable-hdpi-icon.png" platform="android" qualifier="hdpi" />
+    <icon src="res/icon/android/drawable-xhdpi-icon.png" platform="android" qualifier="xhdpi" />
+    <icon src="res/icon/android/drawable-xxhdpi-icon.png" platform="android" qualifier="xxhdpi" />
+    <icon src="res/icon/android/drawable-xxxhdpi-icon.png" platform="android" qualifier="xxxhdpi" />
+    <plugin name="cordova-plugin-file" spec="~6.0.1" />
+    -->
     <platform name="android">
         <icon density="ldpi" src="res/icon/android/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="res/icon/android/drawable-mdpi-icon.png" />
@@ -27,6 +48,7 @@
         <splash density="port-xxhdpi" src="res/screen/android/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="res/screen/android/drawable-port-xxxhdpi-screen.png" />
     </platform>
+
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -38,7 +60,4 @@
         <allow-intent href="market:*" />
     </platform>
     <engine name="browser" spec="~5.0.3" />
-    <plugin name="cordova-plugin-splashscreen" spec="~5.0.2" />
-    <plugin name="cordova-plugin-file" spec="~6.0.1" />
-    <plugin name="cordova-plugin-email-composer" spec="~0.8.15" />
 </widget>

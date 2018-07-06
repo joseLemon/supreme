@@ -299,15 +299,16 @@ var map = {
         bottom.find('.desc').html(location.desc);
         bottom.addClass('shown');
         top.addClass('shown');
-        if(!$(marker).hasClass('active')) {
+        /*if(!$(marker).hasClass('active')) {
             setTimeout(function () {
                 top.animate({scrollTop: ($(marker).position().top) - (top.height()/2)},500,'swing');
             },300);
         } else {
             top.animate({scrollTop: ($(marker).position().top) - (top.height()/2)},500,'swing');
-        }
+        }*/
         $('.map-btn.active').removeClass('active');
         $(marker).addClass('active');
+        map.resetZoom();
     },
     closeDetails: function () {
         var top = $('#map-container'),
@@ -316,6 +317,30 @@ var map = {
         marker.removeClass('active');
         bottom.removeClass('shown');
         top.removeClass('shown');
+        map.resetZoom();
+    },
+    setZoom: function () {
+        var zoom = $('.panzoom');
+        zoom.panzoom({
+            $zoomIn: $(".zoom-in"),
+            $zoomOut: $(".zoom-out"),
+            $set: zoom,
+            increment: 0.2,
+            minScale: 1,
+            maxScale: 2,
+            contain: 'invert'
+        });
+        $('.panzoom button').on('mouseup touchend', function( e ) {
+            e.stopImmediatePropagation();
+            $(this).click();
+        });
+    },
+    resetZoom: function () {
+        var zoom = $('.panzoom'),
+            transform = zoom.panzoom('getTransform');
+        // If map is not zoomed
+        if(Number(transform.substring(7,transform.indexOf(','))) === 1 )
+            zoom.panzoom('reset');
     },
     locations_json: null
 };
@@ -356,6 +381,7 @@ function detectNav(tgt) {
             break;
         case 'map.html':
             map.getLocations();
+            map.setZoom();
             break;
         case 'participants.html':
             participants.getParticipants(true);
